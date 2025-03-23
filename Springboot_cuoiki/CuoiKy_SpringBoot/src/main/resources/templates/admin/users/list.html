@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head('Quản lý người dùng')">
+    <title>Quản lý người dùng - Admin Panel</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-0">
+                <div th:replace="admin/fragments/layout :: sidebar"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 content">
+                <div th:replace="admin/fragments/layout :: navbar"></div>
+                
+                <div class="container-fluid mt-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1 class="h3">Quản lý người dùng</h1>
+                        <a th:href="@{/admin/users/new}" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Thêm người dùng mới
+                        </a>
+                    </div>
+                    
+                    <div class="alert alert-success" th:if="${message}" th:text="${message}"></div>
+                    
+                    <!-- Filters -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Bộ lọc</h6>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/admin/users}" method="get" class="row g-3">
+                                <div class="col-md-3">
+                                    <label for="role" class="form-label">Vai trò</label>
+                                    <select class="form-select" id="role" name="role">
+                                        <option value="">Tất cả vai trò</option>
+                                        <option value="ROLE_USER">Người dùng</option>
+                                        <option value="ROLE_ADMIN">Quản trị viên</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="status" class="form-label">Trạng thái</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="">Tất cả trạng thái</option>
+                                        <option value="active">Đang hoạt động</option>
+                                        <option value="inactive">Không hoạt động</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="search" class="form-label">Tìm kiếm</label>
+                                    <input type="text" class="form-control" id="search" name="search" placeholder="Tìm theo tên, email, username...">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search"></i> Tìm kiếm
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Họ tên</th>
+                                            <th>Vai trò</th>
+                                            <th>Trạng thái</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="user : ${users}">
+                                            <td th:text="${user.id}">1</td>
+                                            <td th:text="${user.username}">admin</td>
+                                            <td th:text="${user.email}">admin@example.com</td>
+                                            <td th:text="${user.fullName}">Admin User</td>
+                                            <td>
+                                                <span class="badge bg-primary" th:if="${user.role == 'ROLE_ADMIN'}">Quản trị viên</span>
+                                                <span class="badge bg-secondary" th:if="${user.role == 'ROLE_USER'}">Người dùng</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success" th:if="${user.enabled}">
+                                                    <i class="fas fa-check-circle me-1"></i> Hoạt động
+                                                </span>
+                                                <span class="badge bg-danger" th:unless="${user.enabled}">
+                                                    <i class="fas fa-times-circle me-1"></i> Không hoạt động
+                                                </span>
+                                            </td>
+                                            <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">01/01/2023</td>
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a th:href="@{/admin/users/view/{id}(id=${user.id})}" class="btn btn-sm btn-info">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" 
+                                                       class="btn btn-sm btn-danger"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${users.empty}">
+                                            <td colspan="8" class="text-center">Không tìm thấy người dùng nào</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation" th:if="${totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                                <a class="page-link" th:href="@{/admin/users(page=0)}">Đầu</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                                <a class="page-link" th:href="@{/admin/users(page=${currentPage - 1})}">Trước</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" 
+                                th:classappend="${currentPage == i ? 'active' : ''}">
+                                <a class="page-link" th:href="@{/admin/users(page=${i})}" th:text="${i + 1}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages ? 'disabled' : ''}">
+                                <a class="page-link" th:href="@{/admin/users(page=${currentPage + 1})}">Sau</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages ? 'disabled' : ''}">
+                                <a class="page-link" th:href="@{/admin/users(page=${totalPages - 1})}">Cuối</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="admin/fragments/layout :: scripts"></div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "pageLength": 10,
+                "language": {
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "infoFiltered": "(lọc từ _MAX_ mục)",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
+</html> 

@@ -1,0 +1,389 @@
+/* Admin Form Styles */
+
+/* General Form Styles */
+.admin-form {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.admin-form .form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding-bottom: 1rem;
+}
+
+.admin-form .form-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 1.5rem 0 1rem;
+    color: #444;
+}
+
+.admin-form .form-label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.admin-form .form-control {
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.admin-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(232, 168, 124, 0.25);
+}
+
+.admin-form .form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+.admin-form .form-check {
+    margin-bottom: 1rem;
+}
+
+.admin-form .form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.2rem;
+    cursor: pointer;
+}
+
+.admin-form .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.admin-form .form-check-label {
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding-left: 0.5rem;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: #333;
+}
+
+/* Required Fields */
+.required-field .form-label::after {
+    content: '*';
+    color: var(--danger-color);
+    margin-left: 4px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.form-actions .btn {
+    margin-left: 10px;
+}
+
+/* Input Groups */
+.admin-form .input-group {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-form .input-group-text {
+    background-color: #f8f9fa;
+    border-color: rgba(0,0,0,0.1);
+    color: #495057;
+}
+
+/* Select2 Customization */
+.admin-form .select2-container--default .select2-selection--single,
+.admin-form .select2-container--default .select2-selection--multiple {
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    height: calc(1.5em + 1.2rem + 2px);
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+}
+
+.admin-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #495057;
+    line-height: 1.5;
+    padding-left: 0;
+}
+
+.admin-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+}
+
+/* Form Grid */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+.form-col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-bottom: 1rem;
+}
+
+/* Custom File Upload */
+.custom-file-upload {
+    position: relative;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.custom-file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.custom-file-upload .upload-area {
+    padding: 2rem;
+    text-align: center;
+    border: 2px dashed rgba(0,0,0,0.1);
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover .upload-area {
+    border-color: var(--primary-color);
+}
+
+.custom-file-upload .upload-icon {
+    font-size: 2.5rem;
+    color: rgba(0,0,0,0.2);
+    margin-bottom: 1rem;
+}
+
+.custom-file-upload .upload-text {
+    font-size: 1rem;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.custom-file-upload .upload-subtext {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* File Preview */
+.file-preview {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.file-preview .preview-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.file-preview .preview-details {
+    flex-grow: 1;
+}
+
+.file-preview .file-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.file-preview .file-size {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.file-preview .preview-actions {
+    margin-left: 1rem;
+}
+
+.file-preview .btn-remove {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* Form Validation */
+.admin-form .is-valid {
+    border-color: #28a745 !important;
+}
+
+.admin-form .is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.valid-feedback,
+.invalid-feedback {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.valid-feedback {
+    color: #28a745;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+}
+
+/* Editable Fields */
+.editable-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.editable-field .form-control {
+    flex-grow: 1;
+}
+
+.editable-field .edit-actions {
+    margin-left: 10px;
+    display: flex;
+}
+
+.editable-field .btn-edit,
+.editable-field .btn-save,
+.editable-field .btn-cancel {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+input:focus + .toggle-slider {
+    box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.toggle-switch-label {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Form in Tables */
+.table-form .form-control {
+    padding: 0.375rem 0.75rem;
+    height: calc(1.5em + 0.75rem + 2px);
+}
+
+.table-form .btn {
+    padding: 0.375rem 0.75rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .admin-form {
+        padding: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-actions .btn {
+        margin-left: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    
+    .form-actions .btn:last-child {
+        margin-bottom: 0;
+    }
+} 

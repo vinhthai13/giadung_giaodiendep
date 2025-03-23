@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="filter" class="col-md-3">
+        <form th:action="@{/products}" method="get" id="filterForm">
+            <input type="hidden" name="page" value="0" id="pageInput">
+            <input type="hidden" name="pageSize" th:value="${pageSize != null ? pageSize : 6}" id="pageSizeInput">
+            
+            <!-- Sorting Options -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-3">Sort By</h5>
+                    <select name="sort" class="form-select mb-2" onchange="this.form.submit()">
+                        <option value="name_asc" th:selected="${sort == 'name_asc'}">Name (A-Z)</option>
+                        <option value="name_desc" th:selected="${sort == 'name_desc'}">Name (Z-A)</option>
+                        <option value="price_asc" th:selected="${sort == 'price_asc'}">Price (Low to High)</option>
+                        <option value="price_desc" th:selected="${sort == 'price_desc'}">Price (High to Low)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Price Filter -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-3">Price Range</h5>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="priceRange" id="all" value="all" th:checked="${priceRange == null || priceRange == 'all'}">
+                            <label class="form-check-label ms-2" for="all">All Prices</label>
+                        </div>
+                        <div class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="priceRange" id="under500" value="under500" th:checked="${priceRange == 'under500'}">
+                            <label class="form-check-label ms-2" for="under500">Under 500.000đ</label>
+                        </div>
+                        <div class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="priceRange" id="500to1000" value="500to1000" th:checked="${priceRange == '500to1000'}">
+                            <label class="form-check-label ms-2" for="500to1000">500.000đ - 1.000.000đ</label>
+                        </div>
+                        <div class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="priceRange" id="1000to2000" value="1000to2000" th:checked="${priceRange == '1000to2000'}">
+                            <label class="form-check-label ms-2" for="1000to2000">1.000.000đ - 2.000.000đ</label>
+                        </div>
+                        <div class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="priceRange" id="above2000" value="above2000" th:checked="${priceRange == 'above2000'}">
+                            <label class="form-check-label ms-2" for="above2000">Over 2.000.000đ</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-3">Categories</h5>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="category" id="allCategories" value="all" th:checked="${category == null || category == '' || category == 'all'}">
+                            <label class="form-check-label ms-2" for="allCategories">
+                                <i class="fas fa-box me-2" style="color: var(--primary-color);"></i>
+                                <span class="text-nowrap">All Categories</span>
+                            </label>
+                        </div>
+                        <div th:each="cat : ${categories}" class="list-group-item border-0 px-0">
+                            <input type="radio" class="form-check-input" name="category" th:id="${'cat-' + cat}" th:value="${cat}" th:checked="${category == cat}">
+                            <label class="form-check-label ms-2" th:for="${'cat-' + cat}">
+                                <i th:class="${'fas me-2 ' + 
+                                    (cat == 'Nhà bếp' ? 'fa-utensils' : 
+                                     cat == 'Phòng ngủ' ? 'fa-bed' : 
+                                     cat == 'Phòng khách' ? 'fa-couch' : 'fa-chair')}"
+                                   style="color: var(--primary-color);"></i>
+                                <span class="text-nowrap" th:text="${cat}"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter me-2"></i> Apply Filters
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                    <i class="fas fa-undo me-2"></i> Clear Filters
+                </button>
+            </div>
+        </form>
+
+        <script>
+            function clearFilters() {
+                // Reset all radio buttons
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    if (radio.id === 'all' || radio.id === 'allCategories') {
+                        radio.checked = true;
+                    } else {
+                        radio.checked = false;
+                    }
+                });
+                
+                // Reset sort to default
+                document.querySelector('select[name="sort"]').value = 'name_asc';
+                
+                // Reset page to 0 and submit form
+                document.getElementById('pageInput').value = '0';
+                document.getElementById('filterForm').submit();
+            }
+        </script>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head(${category.id} ? 'Chỉnh Sửa Danh Mục' : 'Thêm Danh Mục Mới')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Danh Mục - Trang Quản Trị</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div th:replace="admin/fragments/layout :: sidebar" th:with="currentPage='categories'"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <div th:replace="admin/fragments/layout :: navbar" th:with="pageTitle=${category.id} ? 'Chỉnh Sửa Danh Mục' : 'Thêm Danh Mục Mới'"></div>
+                
+                <h1 class="h3 mb-4 text-gray-800 fw-bold">
+                    <i class="fas fa-edit me-2 text-primary" th:if="${category.id}"></i>
+                    <i class="fas fa-plus-circle me-2 text-primary" th:unless="${category.id}"></i>
+                    <span th:text="${category.id} ? 'Chỉnh Sửa Danh Mục' : 'Thêm Danh Mục Mới'">Form Danh Mục</span>
+                </h1>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <a th:href="@{/admin/categories}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Quay Lại Danh Sách
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-info-circle me-1"></i> Thông Tin Danh Mục
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/categories/save}" th:object="${category}" method="post" class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{id}" />
+                            <input type="hidden" th:field="*{createdAt}" />
+                            <input type="hidden" th:field="*{updatedAt}" />
+                            
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-bold">Tên danh mục <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" th:field="*{name}" required placeholder="Nhập tên danh mục">
+                                <div class="invalid-feedback">Vui lòng nhập tên danh mục</div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-bold">Mô tả</label>
+                                <textarea class="form-control" id="description" th:field="*{description}" rows="4" placeholder="Nhập mô tả cho danh mục"></textarea>
+                                <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                                <div class="form-text">Mô tả ngắn gọn về danh mục sản phẩm</div>
+                            </div>
+                            
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="active" th:field="*{active}">
+                                <label class="form-check-label fw-bold" for="active">Kích hoạt danh mục</label>
+                                <div class="form-text">Chọn để hiển thị danh mục trên cửa hàng</div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/admin/categories}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-1"></i> Hủy
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Lưu Danh Mục
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="admin/fragments/layout :: scripts"></div>
+    
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+            
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+</html> 

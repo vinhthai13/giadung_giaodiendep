@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="user/fragments/header :: header">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav th:replace="user/fragments/navigation :: navigation"></nav>
+
+    <!-- About Section -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="text-center mb-5 display-5 fw-bold">About FURNITUR</h1>
+                
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3">Our Story</h5>
+                        <p class="card-text">
+                            FURNITUR was founded with the goal of providing customers with high-quality home products
+                            at reasonable prices. We believe that every home deserves the best products to make
+                            everyday life easier and more comfortable.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-3">Our Commitment</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-3 d-flex align-items-center">
+                                <i class="fas fa-check-circle me-2" style="color: var(--primary-color);"></i>
+                                Authentic, high-quality products
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <i class="fas fa-check-circle me-2" style="color: var(--primary-color);"></i>
+                                Competitive pricing with many promotions
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <i class="fas fa-check-circle me-2" style="color: var(--primary-color);"></i>
+                                Dedicated customer service
+                            </li>
+                            <li class="mb-3 d-flex align-items-center">
+                                <i class="fas fa-check-circle me-2" style="color: var(--primary-color);"></i>
+                                Official warranty
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold mb-4">Why Choose Us?</h5>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-shipping-fast fa-2x me-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Fast Delivery</h6>
+                                        <p class="mb-0">Delivery within 24 hours in the city</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-medal fa-2x me-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Quality Products</h6>
+                                        <p class="mb-0">100% authentic guarantee</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-headset fa-2x me-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">24/7 Support</h6>
+                                        <p class="mb-0">Always ready to help customers</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-undo fa-2x me-3" style="color: var(--primary-color);"></i>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Easy Returns</h6>
+                                        <p class="mb-0">Returns within 7 days</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="user/fragments/footer :: footer"></footer>
+</body>
+</html> 

@@ -1,0 +1,11 @@
+http://localhost:8082/api/test (thử endpoint này trước)
+http://localhost:8082/api/users
+http://localhost:8082/api/products
+http://localhost:8082/api/categories
+http://localhost:8082/api/orders
+http://localhost:8082/api/order-items
+http://localhost:8082/api/carts
+http://localhost:8082/api/cart-items
+
+// Thái note 21/3/2025
+mvn spring-boot:run

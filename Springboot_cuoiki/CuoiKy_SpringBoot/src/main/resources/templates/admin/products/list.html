@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head('Sản Phẩm')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm - Trang Quản Trị</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div th:replace="admin/fragments/layout :: sidebar" th:with="currentPage='products'"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <div th:replace="admin/fragments/layout :: navbar" th:with="pageTitle='Quản Lý Sản Phẩm'"></div>
+                
+                <!-- Alert Message -->
+                <div th:if="${message}" class="alert alert-success alert-dismissible fade show my-3" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${message}">Success message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <h1 class="h3 mb-4 text-gray-800 fw-bold">
+                    <i class="fas fa-box-open me-2 text-primary"></i>Danh Sách Sản Phẩm
+                </h1>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <p class="text-muted">Quản lý tất cả sản phẩm trong hệ thống</p>
+                    </div>
+                    <a th:href="@{/admin/products/new}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Thêm Sản Phẩm Mới
+                    </a>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Sản Phẩm</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Tùy chọn:</div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-download me-1"></i> Xuất dữ liệu</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-print me-1"></i> In danh sách</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Hình ảnh</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá bán</th>
+                                        <th>Tồn kho</th>
+                                        <th>Danh mục</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="product : ${products}">
+                                        <td th:text="${product.id}">1</td>
+                                        <td class="text-center">
+                                            <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" alt="Hình sản phẩm" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <span th:unless="${product.imageUrl}" class="text-muted"><i class="fas fa-image fa-2x"></i></span>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{/admin/products/edit/{id}(id=${product.id})}" class="fw-bold text-decoration-none" th:text="${product.name}">Tên sản phẩm</a>
+                                        </td>
+                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">100.000 ₫</td>
+                                        <td class="text-center" th:text="${product.stockQuantity}">100</td>
+                                        <td th:text="${product.category}">Danh mục</td>
+                                        <td class="text-center">
+                                            <span class="badge px-3 py-2" th:classappend="${product.active ? 'bg-success' : 'bg-danger'}"
+                                                  th:text="${product.active ? 'Đang bán' : 'Ngừng bán'}">Trạng thái</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a th:href="@{/admin/products/edit/{id}(id=${product.id})}" class="btn btn-sm btn-primary me-1">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </a>
+                                            <a th:href="@{/admin/products/delete/{id}(id=${product.id})}" 
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
+                                                <i class="fas fa-trash"></i> Xóa
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${products.empty}">
+                                        <td colspan="8" class="text-center">
+                                            <div class="py-4">
+                                                <i class="fas fa-box-open fa-3x text-gray-300 mb-3"></i>
+                                                <p class="mb-0">Không tìm thấy sản phẩm nào</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="admin/fragments/layout :: scripts"></div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                language: {
+                    search: "Tìm kiếm:",
+                    lengthMenu: "Hiển thị _MENU_ mục",
+                    info: "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+                    infoFiltered: "(được lọc từ _MAX_ mục)",
+                    zeroRecords: "Không tìm thấy dữ liệu phù hợp",
+                    paginate: {
+                        first: "Đầu",
+                        previous: "Trước",
+                        next: "Tiếp",
+                        last: "Cuối"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head(${product.id} ? 'Chỉnh Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sản Phẩm - Trang Quản Trị</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div th:replace="admin/fragments/layout :: sidebar" th:with="currentPage='products'"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <div th:replace="admin/fragments/layout :: navbar" th:with="pageTitle=${product.id} ? 'Chỉnh Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới'"></div>
+                
+                <h1 class="h3 mb-4 text-gray-800 fw-bold">
+                    <i class="fas fa-edit me-2 text-primary" th:if="${product.id}"></i>
+                    <i class="fas fa-plus-circle me-2 text-primary" th:unless="${product.id}"></i>
+                    <span th:text="${product.id} ? 'Chỉnh Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới'">Form Sản Phẩm</span>
+                </h1>
+                
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <a th:href="@{/admin/products}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Quay Lại Danh Sách
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-info-circle me-1"></i> Thông Tin Sản Phẩm
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/products/save}" th:object="${product}" method="post" class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{id}" />
+                            <input type="hidden" th:field="*{createdAt}" />
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                                    <div class="invalid-feedback">Vui lòng nhập tên sản phẩm</div>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="price" class="form-label fw-bold">Giá bán <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="price" th:field="*{price}" step="1000" min="0" required>
+                                        <span class="input-group-text">₫</span>
+                                        <div class="invalid-feedback">Vui lòng nhập giá sản phẩm hợp lệ</div>
+                                    </div>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                                    <div class="form-text">Nhập giá bán không có dấu phân cách</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="stockQuantity" class="form-label fw-bold">Số lượng tồn kho <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}" min="0" required>
+                                    <div class="invalid-feedback">Vui lòng nhập số lượng tồn kho</div>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}"></div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="category" class="form-label fw-bold">Danh mục <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="category" th:field="*{category}" required>
+                                    <div class="invalid-feedback">Vui lòng nhập danh mục sản phẩm</div>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="imageUrl" class="form-label fw-bold">URL hình ảnh</label>
+                                <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" placeholder="Nhập URL hình ảnh sản phẩm">
+                                <div class="text-danger" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
+                                <div class="form-text">URL hình ảnh đại diện cho sản phẩm</div>
+                                
+                                <!-- Hiển thị hình ảnh xem trước -->
+                                <div class="mt-2" th:if="${product.imageUrl != null && !product.imageUrl.isEmpty()}">
+                                    <label class="form-label fw-bold">Xem trước:</label>
+                                    <div>
+                                        <img th:src="${product.imageUrl}" alt="Hình ảnh sản phẩm" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-bold">Mô tả sản phẩm <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="description" th:field="*{description}" rows="5" required placeholder="Nhập mô tả chi tiết về sản phẩm"></textarea>
+                                <div class="invalid-feedback">Vui lòng nhập mô tả sản phẩm</div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                            </div>
+                            
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="active" th:field="*{active}">
+                                <label class="form-check-label fw-bold" for="active">Kích hoạt bán hàng</label>
+                                <div class="form-text">Chọn để hiển thị sản phẩm trên cửa hàng</div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/admin/products}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-1"></i> Hủy
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Lưu Sản Phẩm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="admin/fragments/layout :: scripts"></div>
+    
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+            
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+        
+        // Xem trước hình ảnh khi nhập URL
+        document.getElementById('imageUrl').addEventListener('input', function() {
+            const imageUrl = this.value;
+            const previewContainer = this.parentElement.querySelector('div:last-child');
+            
+            if (imageUrl) {
+                if (!previewContainer || !previewContainer.querySelector('img')) {
+                    const newPreview = document.createElement('div');
+                    newPreview.className = 'mt-2';
+                    newPreview.innerHTML = `
+                        <label class="form-label fw-bold">Xem trước:</label>
+                        <div>
+                            <img src="${imageUrl}" alt="Hình ảnh sản phẩm" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                    `;
+                    this.parentElement.appendChild(newPreview);
+                } else if (previewContainer.querySelector('img')) {
+                    previewContainer.querySelector('img').src = imageUrl;
+                }
+            } else if (previewContainer && previewContainer.querySelector('img')) {
+                previewContainer.remove();
+            }
+        });
+    </script>
+</body>
+</html> 

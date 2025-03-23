@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="carousel" id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/images/banner1.jpg" class="d-block w-100" alt="Banner 1">
+                <div class="carousel-caption">
+                    <h2 class="display-4 fw-bold mb-3">FILL YOUR HOME<br>WITH THE BEST FURNITURE</h2>
+                    <p class="lead mb-4">Premium quality furniture for your home and office</p>
+                    <a href="/products" class="btn btn-lg hero-button">
+                        Our Collection <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/banner2.jpg" class="d-block w-100" alt="Banner 2">
+                <div class="carousel-caption">
+                    <h2 class="display-4 fw-bold mb-3">EXCLUSIVE DESIGNS</h2>
+                    <p class="lead mb-4">Furniture that reflects your personality and style</p>
+                    <a href="/products" class="btn btn-lg hero-button">
+                        Explore Now <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/banner3.jpg" class="d-block w-100" alt="Banner 3">
+                <div class="carousel-caption">
+                    <h2 class="display-4 fw-bold mb-3">PREMIUM QUALITY</h2>
+                    <p class="lead mb-4">Built to last with the finest materials</p>
+                    <a href="/products" class="btn btn-lg hero-button">
+                        Discover More <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/banner4.jpg" class="d-block w-100" alt="Banner 4">
+                <div class="carousel-caption">
+                    <h2 class="display-4 fw-bold mb-3">NATIONWIDE DELIVERY</h2>
+                    <p class="lead mb-4">Free shipping on orders over 500.000đ</p>
+                    <a href="/contact" class="btn btn-lg hero-button">
+                        Contact Us <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    
+    <!-- Stats Section -->
+    <div th:fragment="stats" class="container my-5">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="stats-item">
+                    <div class="stats-number">12K+</div>
+                    <div class="stats-label">Items Sold</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-item">
+                    <div class="stats-number">12</div>
+                    <div class="stats-label">Stores</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-item">
+                    <div class="stats-number">4K+</div>
+                    <div class="stats-label">Customers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

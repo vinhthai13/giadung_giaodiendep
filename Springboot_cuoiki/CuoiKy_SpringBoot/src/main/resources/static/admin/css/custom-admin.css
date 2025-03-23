@@ -1,0 +1,364 @@
+/* Custom Admin Styles */
+
+/* Dashboard Cards */
+.dashboard-card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    padding: 20px;
+    height: 100%;
+}
+
+.dashboard-card .icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.dashboard-card .title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.dashboard-card .subtitle {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card .number {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: -1px;
+}
+
+.dashboard-card .footer {
+    font-size: 0.85rem;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.dashboard-card .footer i {
+    margin-right: 5px;
+}
+
+.dashboard-card .footer.positive {
+    color: #28a745;
+}
+
+.dashboard-card .footer.negative {
+    color: #dc3545;
+}
+
+/* Chart Containers */
+.chart-container {
+    position: relative;
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 25px;
+}
+
+.chart-container .chart-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.chart-container .chart-subtitle {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+/* Recent Activity */
+.activity-feed {
+    padding: 0;
+    list-style: none;
+}
+
+.activity-feed .activity-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.activity-feed .activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-feed .activity-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+}
+
+.activity-feed .activity-item .activity-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.activity-feed .activity-item .activity-text {
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+.activity-feed .activity-item .activity-link {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.activity-feed .activity-item .activity-link:hover {
+    text-decoration: underline;
+}
+
+/* Top Customers Table */
+.customers-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.customers-table th,
+.customers-table td {
+    padding: 12px 15px;
+}
+
+.customers-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.customers-table tbody tr {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.customers-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.customers-table .customer-info {
+    display: flex;
+    align-items: center;
+}
+
+.customers-table .customer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #f1f1f1;
+    overflow: hidden;
+}
+
+.customers-table .customer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.customers-table .customer-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.customers-table .customer-email {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* Product Management */
+.product-management-table .product-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.product-management-table .product-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.product-management-table .product-category {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.product-management-table .product-price {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Order Management */
+.order-status {
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.order-status.pending {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.order-status.processing {
+    background-color: rgba(0, 123, 255, 0.2);
+    color: #007bff;
+}
+
+.order-status.shipped {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.order-status.delivered {
+    background-color: rgba(32, 201, 151, 0.2);
+    color: #20c997;
+}
+
+.order-status.cancelled {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+}
+
+/* Form styles */
+.admin-form .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.admin-form .form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.admin-form .input-group-text {
+    background-color: #f8f9fa;
+    border-color: rgba(0,0,0,0.1);
+}
+
+/* Image uploads */
+.image-upload-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border: 2px dashed rgba(0,0,0,0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background-color: #f8f9fa;
+}
+
+.image-upload-container:hover {
+    border-color: var(--primary-color);
+}
+
+.image-upload-container .upload-icon {
+    font-size: 3rem;
+    color: rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+}
+
+.image-upload-container .upload-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.image-upload-container .upload-subtext {
+    font-size: 0.8rem;
+    color: #adb5bd;
+    margin-top: 5px;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Settings Page */
+.settings-section {
+    margin-bottom: 2.5rem;
+}
+
+.settings-section .settings-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.settings-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.settings-card .settings-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.settings-card .settings-card-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+/* Media Queries */
+@media (max-width: 992px) {
+    .dashboard-card .number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-card {
+        margin-bottom: 20px;
+    }
+    
+    .chart-container {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-card .number {
+        font-size: 1.8rem;
+    }
+} 

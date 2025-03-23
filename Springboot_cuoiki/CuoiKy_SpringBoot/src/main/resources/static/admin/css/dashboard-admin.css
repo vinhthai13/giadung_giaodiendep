@@ -1,0 +1,459 @@
+/* Admin Dashboard Styles */
+
+/* Dashboard Stats Cards */
+.stat-card {
+    background-color: #fff;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-card .stat-icon {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.stat-card .stat-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.stat-card .stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.stat-card .stat-desc {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.stat-card .stat-trend {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 5px;
+    font-weight: 500;
+}
+
+.stat-card .stat-trend.up {
+    color: #28a745;
+}
+
+.stat-card .stat-trend.down {
+    color: #dc3545;
+}
+
+.stat-card .stat-trend i {
+    margin-right: 2px;
+    font-size: 0.9rem;
+}
+
+/* Dashboard Charts */
+.chart-container {
+    background-color: #fff;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.chart-container .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.chart-container .chart-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0;
+}
+
+.chart-container .chart-actions {
+    display: flex;
+}
+
+.chart-container .chart-filter {
+    margin-left: 10px;
+}
+
+.chart-container .chart-content {
+    position: relative;
+    height: 300px;
+}
+
+.chart-container .chart-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.chart-container .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chart-container .legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.chart-container .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+/* Recent Activities */
+.activity-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.activity-item {
+    display: flex;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(232, 168, 124, 0.1);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex-grow: 1;
+}
+
+.activity-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* Recent Orders */
+.recent-orders {
+    margin-bottom: 0;
+}
+
+.recent-orders th,
+.recent-orders td {
+    padding: 15px 10px;
+    vertical-align: middle;
+}
+
+.recent-orders th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+}
+
+.recent-orders td {
+    font-size: 0.9rem;
+    color: #444;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.recent-orders tr:last-child td {
+    border-bottom: none;
+}
+
+.order-id {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.order-customer {
+    display: flex;
+    align-items: center;
+}
+
+.order-customer-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    overflow: hidden;
+}
+
+.order-customer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-customer-name {
+    font-weight: 500;
+}
+
+.order-date {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.order-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.order-status.pending {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+}
+
+.order-status.processing {
+    background-color: rgba(0, 123, 255, 0.15);
+    color: #007bff;
+}
+
+.order-status.shipped {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.order-status.delivered {
+    background-color: rgba(23, 162, 184, 0.15);
+    color: #17a2b8;
+}
+
+.order-status.cancelled {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+}
+
+.order-amount {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* To-Do List */
+.todo-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.todo-item:last-child {
+    border-bottom: none;
+}
+
+.todo-checkbox {
+    margin-right: 10px;
+}
+
+.todo-text {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    color: #444;
+    transition: all 0.2s ease;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+.todo-actions {
+    display: flex;
+    align-items: center;
+}
+
+.todo-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-right: 10px;
+}
+
+.todo-priority {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.todo-priority.high {
+    background-color: #dc3545;
+}
+
+.todo-priority.medium {
+    background-color: #ffc107;
+}
+
+.todo-priority.low {
+    background-color: #28a745;
+}
+
+/* Quick Stats Cards */
+.quick-stat-cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -10px;
+    margin-left: -10px;
+    margin-bottom: 20px;
+}
+
+.quick-stat-card {
+    flex: 0 0 calc(25% - 20px);
+    max-width: calc(25% - 20px);
+    margin: 0 10px 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.quick-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.quick-stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 15px;
+}
+
+.quick-stat-content {
+    flex-grow: 1;
+}
+
+.quick-stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0;
+    line-height: 1.2;
+}
+
+.quick-stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .quick-stat-card {
+        flex: 0 0 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .stat-card {
+        margin-bottom: 20px;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.8rem;
+    }
+    
+    .chart-container .chart-content {
+        height: 250px;
+    }
+    
+    .activity-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+} 

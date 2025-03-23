@@ -1,0 +1,75 @@
+/* CSS cho hóa đơn */
+.invoice-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.invoice-container h4 {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.invoice-pre {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    font-size: 14px;
+    margin: 0;
+    text-align: left;
+    line-height: 1.5;
+    color: #333;
+    overflow-x: auto;
+}
+
+/* Định dạng các phần trong hóa đơn */
+.invoice-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.invoice-shop-info {
+    margin-bottom: 15px;
+}
+
+.invoice-customer-info {
+    margin-bottom: 15px;
+}
+
+.invoice-items {
+    margin-bottom: 15px;
+}
+
+.invoice-total {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.invoice-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-style: italic;
+}
+
+@media print {
+    .invoice-container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .invoice-pre {
+        background-color: white;
+        padding: 0;
+        border: none;
+        font-size: 12px;
+    }
+} 

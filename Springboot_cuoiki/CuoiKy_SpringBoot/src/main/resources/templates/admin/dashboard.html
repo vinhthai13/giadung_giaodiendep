@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head('Tổng Quan')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div th:replace="admin/fragments/layout :: sidebar" th:with="currentPage='dashboard'"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <div th:replace="admin/fragments/layout :: navbar" th:with="pageTitle='Tổng Quan Hệ Thống'"></div>
+                
+                <!-- Alert Message -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show my-3" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${successMessage}">Success message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}">Error message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <h1 class="h3 mb-4 text-gray-800 fw-bold">
+                    <i class="fas fa-tachometer-alt me-2 text-primary"></i>Tổng Quan
+                </h1>
+                
+                <!-- Stats Cards -->
+                <div class="row">
+                    <!-- Products Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100">
+                            <div class="card-body py-4">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Sản phẩm</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${productCount}">18</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-box-open fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent p-0">
+                                <a th:href="@{/admin/products}" class="btn btn-link w-100 text-primary text-decoration-none">
+                                    Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100">
+                            <div class="card-body py-4">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Đơn hàng</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${orderCount}">12</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent p-0">
+                                <a th:href="@{/admin/orders}" class="btn btn-link w-100 text-success text-decoration-none">
+                                    Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100">
+                            <div class="card-body py-4">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Người dùng</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${userCount}">5</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent p-0">
+                                <a th:href="@{/admin/users}" class="btn btn-link w-100 text-info text-decoration-none">
+                                    Xem chi tiết <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Card -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100">
+                            <div class="card-body py-4">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Doanh thu</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' ₫'">2.500.000 ₫</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-coins fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="row">
+                    <!-- Area Chart -->
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Doanh thu theo tháng</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Tùy chọn:</div>
+                                        <a class="dropdown-item" href="#"><i class="fas fa-download me-1"></i> Xuất báo cáo</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#"><i class="fas fa-print me-1"></i> In báo cáo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="revenueChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pie Chart -->
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Phân bố đơn hàng theo trạng thái</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink2">
+                                        <div class="dropdown-header">Tùy chọn:</div>
+                                        <a class="dropdown-item" href="#"><i class="fas fa-download me-1"></i> Xuất báo cáo</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-pie pt-4 pb-2">
+                                    <canvas id="orderStatusChart"></canvas>
+                                </div>
+                                <div class="mt-4 text-center small">
+                                    <span class="mr-2">
+                                        <i class="fas fa-circle text-warning"></i> Đang xử lý
+                                    </span>
+                                    <span class="mr-2">
+                                        <i class="fas fa-circle text-success"></i> Hoàn thành
+                                    </span>
+                                    <span class="mr-2">
+                                        <i class="fas fa-circle text-danger"></i> Đã hủy
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product & Customer Stats -->
+                <div class="row">
+                    <!-- Top Products -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Top sản phẩm bán chạy</h6>
+                                <a th:href="@{/admin/products}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-list me-1"></i> Xem tất cả
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Sản phẩm</th>
+                                                <th>Danh mục</th>
+                                                <th>Đã bán</th>
+                                                <th>Doanh thu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="product : ${topProducts}">
+                                                <td>
+                                                    <a th:href="@{/admin/products/{id}(id=${product.id})}" class="fw-bold text-decoration-none" th:text="${product.name}">Sản phẩm 1</a>
+                                                </td>
+                                                <td th:text="${product.category}">Danh mục</td>
+                                                <td class="text-center fw-bold" th:text="${product.soldCount}">150</td>
+                                                <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(product.revenue, 0, 'COMMA', 0, 'POINT')} + ' ₫'">5.000.000 ₫</td>
+                                            </tr>
+                                            <tr th:if="${topProducts == null || topProducts.empty}">
+                                                <td colspan="4" class="text-center">
+                                                    <div class="py-4">
+                                                        <i class="fas fa-box-open fa-3x text-gray-300 mb-3"></i>
+                                                        <p class="mb-0">Không có dữ liệu</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Customers -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Khách hàng thân thiết</h6>
+                                <a th:href="@{/admin/customers}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-users me-1"></i> Xem tất cả
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Khách hàng</th>
+                                                <th>Email</th>
+                                                <th>Đơn hàng</th>
+                                                <th>Chi tiêu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="customer : ${topCustomers}">
+                                                <td>
+                                                    <a th:href="@{/admin/customers/{id}(id=${customer.id})}" class="fw-bold text-decoration-none" th:text="${customer.customerName}">Khách hàng 1</a>
+                                                </td>
+                                                <td th:text="${customer.customerEmail}">email@example.com</td>
+                                                <td class="text-center fw-bold" th:text="${customer.orderCount}">5</td>
+                                                <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(customer.totalSpending, 0, 'COMMA', 0, 'POINT')} + ' ₫'">10.500.000 ₫</td>
+                                            </tr>
+                                            <tr th:if="${topCustomers == null || topCustomers.empty}">
+                                                <td colspan="4" class="text-center">
+                                                    <div class="py-4">
+                                                        <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
+                                                        <p class="mb-0">Không có dữ liệu</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Orders -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Đơn hàng gần đây</h6>
+                        <a th:href="@{/admin/orders}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-list me-1"></i> Xem tất cả
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Mã ĐH</th>
+                                        <th>Khách hàng</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="order : ${recentOrders}">
+                                        <td class="fw-bold" th:text="${order.id}">1</td>
+                                        <td th:text="${order.customerName}">John Doe</td>
+                                        <td th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">01-01-2023</td>
+                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'">100.000 ₫</td>
+                                        <td>
+                                            <span class="badge px-3 py-2" 
+                                                  th:classappend="${order.orderStatus == 'PENDING' ? 'bg-warning' : 
+                                                                  (order.orderStatus == 'COMPLETED' ? 'bg-success' : 
+                                                                  (order.orderStatus == 'CANCELLED' ? 'bg-danger' : 'bg-info'))}"
+                                                  th:text="${order.orderStatus == 'PENDING' ? 'Đang xử lý' : 
+                                                          (order.orderStatus == 'COMPLETED' ? 'Hoàn thành' : 
+                                                          (order.orderStatus == 'CANCELLED' ? 'Đã hủy' : order.orderStatus))}">Trạng thái</span>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i> Xem
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${recentOrders == null || recentOrders.empty}">
+                                        <td colspan="6" class="text-center">
+                                            <div class="py-4">
+                                                <i class="fas fa-shopping-cart fa-3x text-gray-300 mb-3"></i>
+                                                <p class="mb-0">Không có đơn hàng</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="admin/fragments/layout :: scripts"></div>
+    
+    <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Thiết lập cho biểu đồ
+        Chart.defaults.font.family = "'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
+        Chart.defaults.font.size = 13;
+        Chart.defaults.color = '#5a5c69';
+        
+        // Revenue Chart
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var monthlyRevenue = /*[[${monthlyRevenue}]]*/ [500000, 800000, 1200000, 900000, 1500000, 2000000, 1800000, 1600000, 2200000, 2500000, 2300000, 2800000];
+        var monthNames = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+        
+        // Mô phỏng dữ liệu nếu không có dữ liệu thực
+        if (!monthlyRevenue) {
+            monthlyRevenue = [500000, 800000, 1200000, 900000, 1500000, 2000000, 1800000, 1600000, 2200000, 2500000, 2300000, 2800000];
+        }
+        
+        var revenueChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: monthNames,
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: monthlyRevenue,
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    borderColor: 'rgba(78, 115, 223, 1)',
+                    pointRadius: 3,
+                    pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                    pointBorderColor: 'rgba(78, 115, 223, 1)',
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
+                    pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyColor: "#858796",
+                        titleColor: '#6e707e',
+                        titleMarginBottom: 10,
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        padding: 15,
+                        displayColors: false,
+                        intersect: false,
+                        mode: 'index',
+                        caretPadding: 10,
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            callback: function(value) {
+                                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+                            }
+                        },
+                        grid: {
+                            color: "rgb(234, 236, 244)",
+                            borderDash: [2],
+                            drawBorder: false,
+                            zeroLineBorderDash: [2],
+                            zeroLineBorderDashOffset: [2]
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Order Status Chart
+        var orderCtx = document.getElementById('orderStatusChart').getContext('2d');
+        var pendingOrders = /*[[${pendingOrderCount}]]*/ 15;
+        var completedOrders = /*[[${completedOrderCount}]]*/ 35;
+        var cancelledOrders = /*[[${cancelledOrderCount}]]*/ 5;
+        
+        // Mô phỏng dữ liệu nếu không có dữ liệu thực
+        if (!pendingOrders && !completedOrders && !cancelledOrders) {
+            pendingOrders = 15;
+            completedOrders = 35;
+            cancelledOrders = 5;
+        }
+        
+        var orderStatusChart = new Chart(orderCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Đang xử lý', 'Hoàn thành', 'Đã hủy'],
+                datasets: [{
+                    data: [pendingOrders, completedOrders, cancelledOrders],
+                    backgroundColor: ['#f6c23e', '#1cc88a', '#e74a3b'],
+                    hoverBackgroundColor: ['#f5b720', '#17a673', '#e02d1b'],
+                    hoverBorderColor: 'rgba(234, 236, 244, 1)',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: "rgb(255,255,255)",
+                        bodyColor: "#858796",
+                        borderColor: '#dddfeb',
+                        borderWidth: 1,
+                        padding: 15,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                var value = context.raw;
+                                var total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                var percentage = Math.round((value / total) * 100);
+                                return label + ': ' + value + ' đơn (' + percentage + '%)';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+        
+        // Hiệu ứng khi hover vào card
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.classList.add('shadow-lg');
+            });
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('shadow-lg');
+            });
+        });
+        
+        // Thêm CSS cho card border left
+        const style = document.createElement('style');
+        style.textContent = `
+            .border-left-primary {
+                border-left: 4px solid #4e73df !important;
+            }
+            .border-left-success {
+                border-left: 4px solid #1cc88a !important;
+            }
+            .border-left-info {
+                border-left: 4px solid #36b9cc !important;
+            }
+            .border-left-warning {
+                border-left: 4px solid #f6c23e !important;
+            }
+            .chart-area {
+                height: 320px;
+                position: relative;
+            }
+            .chart-pie {
+                height: 250px;
+                position: relative;
+            }
+        `;
+        document.head.appendChild(style);
+    });
+    </script>
+</body>
+</html> 

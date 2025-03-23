@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="product-list" class="col-md-9">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div th:each="product : ${products}" class="col">
+                <div class="card h-100">
+                    <a th:href="@{'/products/' + ${product.id}}" class="text-decoration-none">
+                        <img th:src="${product.imageUrl}" class="card-img-top product-img" th:alt="${product.name}">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a th:href="@{'/products/' + ${product.id}}" class="text-decoration-none text-dark" th:text="${product.name}">Product Name</a>
+                        </h5>
+                        <p class="card-text" th:text="${product.description}">Description</p>
+                        <p class="card-text">
+                            <span class="price-tag" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + 'đ'}">Price</span>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <form th:action="@{/cart/add}" method="post">
+                                <input type="hidden" name="productId" th:value="${product.id}" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary" th:disabled="${product.stockQuantity <= 0}">
+                                    <i class="fas fa-cart-plus me-2"></i> Add to Cart
+                                </button>
+                            </form>
+                            <span class="badge bg-success" th:if="${product.stockQuantity > 0}">
+                                <i class="fas fa-check-circle me-1"></i> In Stock
+                            </span>
+                            <span class="badge bg-danger" th:unless="${product.stockQuantity > 0}">
+                                <i class="fas fa-times-circle me-1"></i> Out of Stock
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav th:if="${totalPages > 1}" class="mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-muted mb-0">Showing page <span th:text="${currentPage + 1}">1</span> of <span th:text="${totalPages}">5</span></p>
+                <div>
+                    <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                        <option value="6" selected>6 per page</option>
+                        <option value="12">12 per page</option>
+                        <option value="24">24 per page</option>
+                    </select>
+                </div>
+            </div>
+            
+            <ul class="pagination justify-content-center">
+                <!-- First Page -->
+                <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/products(page=0, category=${param.category}, priceRange=${param.priceRange}, sort=${param.sort})}" aria-label="First">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                
+                <!-- Previous Page -->
+                <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/products(page=${currentPage - 1}, category=${param.category}, priceRange=${param.priceRange}, sort=${param.sort})}" aria-label="Previous">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                
+                <!-- Page Numbers -->
+                <li class="page-item" 
+                    th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:if="${(i >= currentPage - 2 && i <= currentPage + 2) || i == 0 || i == totalPages - 1}"
+                    th:classappend="${i == currentPage ? 'active' : ''}">
+                    
+                    <!-- Show ellipsis for skipped page numbers -->
+                    <span class="page-link" th:if="${i == 0 && currentPage > 2}">1</span>
+                    <span class="page-link" th:if="${i == 0 && currentPage > 3}">...</span>
+                    
+                    <!-- Regular page link -->
+                    <a class="page-link" 
+                       th:href="@{/products(page=${i}, category=${param.category}, priceRange=${param.priceRange}, sort=${param.sort})}"
+                       th:text="${i + 1}" th:if="${!(i == 0 && currentPage > 2) && !(i == totalPages - 1 && currentPage < totalPages - 3)}">1</a>
+                    
+                    <!-- Show ellipsis for skipped page numbers -->
+                    <span class="page-link" th:if="${i == totalPages - 1 && currentPage < totalPages - 3}">...</span>
+                    <span class="page-link" th:if="${i == totalPages - 1 && currentPage < totalPages - 2}" th:text="${totalPages}">Last</span>
+                </li>
+                
+                <!-- Next Page -->
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/products(page=${currentPage + 1}, category=${param.category}, priceRange=${param.priceRange}, sort=${param.sort})}" aria-label="Next">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                
+                <!-- Last Page -->
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/products(page=${totalPages - 1}, category=${param.category}, priceRange=${param.priceRange}, sort=${param.sort})}" aria-label="Last">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const pageSizeSelect = document.getElementById('pageSizeSelect');
+                if (pageSizeSelect) {
+                    pageSizeSelect.addEventListener('change', function() {
+                        const pageSize = this.value;
+                        window.location.href = '/products?page=0&pageSize=' + pageSize + 
+                            '&category=' + (new URLSearchParams(window.location.search).get('category') || '') +
+                            '&priceRange=' + (new URLSearchParams(window.location.search).get('priceRange') || '') +
+                            '&sort=' + (new URLSearchParams(window.location.search).get('sort') || 'name_asc');
+                    });
+                }
+            });
+        </script>
+    </div>
+</body>
+</html> 

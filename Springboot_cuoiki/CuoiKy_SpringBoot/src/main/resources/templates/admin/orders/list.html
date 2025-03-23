@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Đơn Hàng')}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn Hàng - Trang Quản Trị</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div th:replace="~{admin/fragments/layout :: sidebar}" th:with="currentPage='orders'"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <div th:replace="~{admin/fragments/layout :: navbar}" th:with="pageTitle='Quản Lý Đơn Hàng'"></div>
+                
+                <!-- Alert Message -->
+                <div th:if="${message}" class="alert alert-success alert-dismissible fade show my-3" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${message}">Success message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}">Error message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <h1 class="h3 mb-4 text-gray-800 fw-bold">
+                    <i class="fas fa-shopping-cart me-2 text-primary"></i>Quản lý đơn hàng
+                </h1>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <p class="text-muted">Quản lý và xử lý đơn hàng của khách hàng</p>
+                    </div>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Danh Sách Đơn Hàng</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Tùy chọn:</div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-download me-1"></i> Xuất dữ liệu</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-print me-1"></i> In danh sách</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Khách hàng</th>
+                                        <th>Email</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thanh toán</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="order : ${orders}">
+                                        <td th:text="${order.id}">1</td>
+                                        <td>
+                                            <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="fw-bold text-decoration-none" th:text="${order.customerName}">John Doe</a>
+                                        </td>
+                                        <td th:text="${order.customerEmail}">john@example.com</td>
+                                        <td th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">01-01-2023</td>
+                                        <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')}">$100.00</td>
+                                        <td class="text-center">
+                                            <span class="badge px-3 py-2" 
+                                                  th:classappend="${order.orderStatus == 'PENDING' ? 'bg-warning' : 
+                                                                  (order.orderStatus == 'COMPLETED' ? 'bg-success' : 
+                                                                  (order.orderStatus == 'CANCELLED' ? 'bg-danger' : 
+                                                                  (order.orderStatus == 'PROCESSING' ? 'bg-info' :
+                                                                  (order.orderStatus == 'SHIPPED' ? 'bg-primary' :
+                                                                  (order.orderStatus == 'DELIVERED' ? 'bg-secondary' : 'bg-secondary')))))}">
+                                                <i class="fas" th:classappend="${order.orderStatus == 'PENDING' ? 'fa-clock' : 
+                                                                            (order.orderStatus == 'COMPLETED' ? 'fa-check-circle' : 
+                                                                            (order.orderStatus == 'CANCELLED' ? 'fa-times-circle' : 
+                                                                            (order.orderStatus == 'PROCESSING' ? 'fa-spinner' :
+                                                                            (order.orderStatus == 'SHIPPED' ? 'fa-truck' :
+                                                                            (order.orderStatus == 'DELIVERED' ? 'fa-box-open' : 'fa-info-circle')))))}"></i>
+                                                <span th:text="${order.orderStatus == 'PENDING' ? 'Đang xử lý' : 
+                                                                (order.orderStatus == 'COMPLETED' ? 'Hoàn thành' : 
+                                                                (order.orderStatus == 'CANCELLED' ? 'Đã hủy' : 
+                                                                (order.orderStatus == 'PROCESSING' ? 'Đang chuẩn bị' :
+                                                                (order.orderStatus == 'SHIPPED' ? 'Đang vận chuyển' :
+                                                                (order.orderStatus == 'DELIVERED' ? 'Đã giao hàng' : order.orderStatus)))))}">Status</span>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge px-3 py-2" 
+                                                  th:classappend="${order.paymentStatus == 'PAID' ? 'bg-success' : 
+                                                                 (order.paymentStatus == 'UNPAID' ? 'bg-warning' :
+                                                                 (order.paymentStatus == 'REFUNDED' ? 'bg-info' : 'bg-secondary'))}">
+                                                <i class="fas" th:classappend="${order.paymentStatus == 'PAID' ? 'fa-check-circle' : 
+                                                                           (order.paymentStatus == 'UNPAID' ? 'fa-exclamation-circle' :
+                                                                           (order.paymentStatus == 'REFUNDED' ? 'fa-undo-alt' : 'fa-question-circle'))}"></i>
+                                                <span th:text="${order.paymentStatus == 'PAID' ? 'Đã thanh toán' : 
+                                                              (order.paymentStatus == 'UNPAID' ? 'Chưa thanh toán' :
+                                                              (order.paymentStatus == 'REFUNDED' ? 'Đã hoàn tiền' : order.paymentStatus))}">Payment</span>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <a th:href="@{/admin/orders/{id}(id=${order.id})}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i> Xem
+                                                </a>
+                                                <a th:href="@{/admin/orders/delete/{id}(id=${order.id})}" 
+                                                   class="btn btn-sm btn-danger"
+                                                   onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?')">
+                                                    <i class="fas fa-trash"></i> Xóa
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${orders.empty}">
+                                        <td colspan="8" class="text-center">
+                                            <div class="py-4">
+                                                <i class="fas fa-shopping-cart fa-3x text-gray-300 mb-3"></i>
+                                                <p class="mb-0">Không tìm thấy đơn hàng nào</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="~{admin/fragments/layout :: scripts}"></div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "order": [[3, "desc"]],
+                language: {
+                    search: "Tìm kiếm:",
+                    lengthMenu: "Hiển thị _MENU_ mục",
+                    info: "Hiển thị _START_ đến _END_ của _TOTAL_ đơn hàng",
+                    infoEmpty: "Hiển thị 0 đến 0 của 0 đơn hàng",
+                    infoFiltered: "(được lọc từ _MAX_ đơn hàng)",
+                    zeroRecords: "Không tìm thấy đơn hàng phù hợp",
+                    paginate: {
+                        first: "Đầu",
+                        previous: "Trước",
+                        next: "Tiếp",
+                        last: "Cuối"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/header :: header">
+    <meta charset="UTF-8">
+    <title>Đặt hàng thành công</title>
+    <link rel="stylesheet" th:href="@{/css/invoice.css}">
+    <style>
+        .invoice-pre {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 14px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        /* Modal styling */
+        .success-icon {
+            font-size: 80px;
+            color: #28a745;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .modal-success .modal-header {
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .modal-success .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .modal-success .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .invoice-pre {
+                background-color: white;
+                padding: 0;
+                border: none;
+            }
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .container {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="user/fragments/navigation :: navigation" class="no-print"></nav>
+
+    <!-- Success Modal Dialog -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-success">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">Đặt hàng thành công!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <i class="fas fa-check-circle success-icon mb-3"></i>
+                    <h4 class="mt-3">Cảm ơn bạn đã mua hàng</h4>
+                    <p>Đơn hàng của bạn đã được xác nhận và đang được xử lý.</p>
+                    <div class="alert alert-info mt-3 mx-4">
+                        <p class="mb-0">Mã đơn hàng: <strong th:text="${order.id}">#12345</strong></p>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center border-0 pb-4">
+                    <button type="button" class="btn btn-primary px-4" id="viewInvoiceBtn">
+                        <i class="fas fa-file-invoice me-2"></i> Xem hóa đơn
+                    </button>
+                    <a href="/" class="btn btn-success px-4">
+                        <i class="fas fa-shopping-cart me-2"></i> Tiếp tục mua sắm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-4 no-print">
+                            <i class="fas fa-check-circle text-success" style="font-size: 64px;"></i>
+                            <h3 class="card-title text-success mt-3">Đặt hàng thành công!</h3>
+                            <p class="card-text">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được xác nhận.</p>
+                            
+                            <div class="alert alert-info mt-3">
+                                <h5>Mã đơn hàng: <span th:text="${order.id}">#12345</span></h5>
+                                <p>Chúng tôi sẽ gửi email xác nhận đơn hàng đến <span th:text="${order.customerEmail}">email@example.com</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Hiển thị hóa đơn -->
+                        <div class="invoice-container">
+                            <div class="invoice-header">
+                                <h4>Hóa Đơn Bán Hàng</h4>
+                            </div>
+                            <pre class="invoice-pre" th:utext="${invoice}">Hóa đơn sẽ được hiển thị ở đây</pre>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4 no-print">
+                            <button onclick="printInvoice()" class="btn btn-secondary">
+                                <i class="fas fa-print"></i> In hóa đơn
+                            </button>
+                            <a href="/profile/orders" class="btn btn-primary">
+                                <i class="fas fa-list"></i> Xem đơn hàng của tôi
+                            </a>
+                            <a href="/" class="btn btn-outline-primary">
+                                <i class="fas fa-shopping-cart"></i> Tiếp tục mua sắm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="user/fragments/footer :: footer" class="no-print"></footer>
+
+    <script>
+        // Show success modal when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap modal
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
+                backdrop: 'static',  // Prevent closing when clicking outside
+                keyboard: false      // Prevent closing with keyboard
+            });
+            
+            // Show the modal
+            successModal.show();
+            
+            // Handle view invoice button click
+            document.getElementById('viewInvoiceBtn').addEventListener('click', function() {
+                successModal.hide();
+                // Scroll to invoice section
+                document.querySelector('.invoice-container').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Print functionality
+        function printInvoice() {
+            // Chuẩn bị in
+            var originalTitle = document.title;
+            document.title = "Hóa Đơn #" + document.querySelector('.alert-info strong').textContent;
+            
+            // In hóa đơn
+            window.print();
+            
+            // Khôi phục tiêu đề
+            setTimeout(function() {
+                document.title = originalTitle;
+            }, 1000);
+        }
+    </script>
+</body>
+</html> 

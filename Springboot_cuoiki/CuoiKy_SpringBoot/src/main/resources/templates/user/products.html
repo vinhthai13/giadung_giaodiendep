@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="user/fragments/header :: header">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav th:replace="user/fragments/navigation :: navigation"></nav>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Filter -->
+            <div th:replace="user/fragments/filter :: filter"></div>
+            
+            <!-- Product List -->
+            <div th:replace="user/fragments/product-list :: product-list"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="user/fragments/footer :: footer"></footer>
+</body>
+</html> 

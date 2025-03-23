@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/header :: header">
+</head>
+<body>
+    <nav th:replace="user/fragments/navigation :: navigation"></nav>
+
+    <div class="container mt-4">
+        <h2>Giỏ hàng</h2>
+        
+        <!-- Hiển thị thông báo lỗi nếu có -->
+        <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}">
+        </div>
+
+        <div th:if="${cart != null and !cart.items.empty}" class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${cart.items}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img th:if="${item.product.imageUrl}" th:src="${item.product.imageUrl}" 
+                                                     alt="Product Image" style="width: 50px; height: 50px; object-fit: cover;" 
+                                                     class="me-2">
+                                                <span th:text="${item.product.name}">Product Name</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT') + 'đ'}">Price</td>
+                                        <td>
+                                            <form th:action="@{/cart/update}" method="post" class="d-flex align-items-center">
+                                                <input type="hidden" name="productId" th:value="${item.product.id}">
+                                                <input type="number" name="quantity" th:value="${item.quantity}" 
+                                                       min="1" class="form-control form-control-sm" style="width: 70px;">
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary ms-2">
+                                                    <i class="fas fa-sync-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 0, 'POINT') + 'đ'}">Total</td>
+                                        <td>
+                                            <a th:href="@{/cart/remove/{productId}(productId=${item.product.id})}" 
+                                               class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tổng giỏ hàng</h5>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Tổng tiền:</span>
+                            <span class="fw-bold" th:text="${#numbers.formatDecimal(cart.totalAmount, 0, 'COMMA', 0, 'POINT') + 'đ'}">Total Amount</span>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <a href="/cart/checkout" class="btn btn-primary">Thanh toán</a>
+                            <a href="/cart/clear" class="btn btn-outline-danger">Xóa giỏ hàng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${cart == null or cart.items.empty}" class="text-center py-5">
+            <h3>Giỏ hàng trống</h3>
+            <p>Hãy thêm sản phẩm vào giỏ hàng của bạn.</p>
+            <a href="/" class="btn btn-primary">Tiếp tục mua sắm</a>
+        </div>
+    </div>
+
+    <footer th:replace="user/fragments/footer :: footer"></footer>
+</body>
+</html> 

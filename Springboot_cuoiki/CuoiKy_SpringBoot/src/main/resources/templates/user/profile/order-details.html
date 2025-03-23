@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/header :: header">
+    <title>Chi tiết đơn hàng</title>
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+        }
+        .print-only {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="user/fragments/navigation :: navigation" class="no-print"></nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 no-print">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="Profile Picture">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-0" th:text="${user.fullName}">Tên người dùng</h6>
+                                <small class="text-muted" th:text="${user.email}">email@example.com</small>
+                            </div>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="/profile" class="list-group-item list-group-item-action">
+                                <i class="fas fa-user me-2"></i> Thông tin tài khoản
+                            </a>
+                            <a href="/profile/orders" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-shopping-bag me-2"></i> Đơn hàng của tôi
+                            </a>
+                            <a href="/profile/addresses" class="list-group-item list-group-item-action">
+                                <i class="fas fa-map-marker-alt me-2"></i> Sổ địa chỉ
+                            </a>
+                            <a href="/profile/change-password" class="list-group-item list-group-item-action">
+                                <i class="fas fa-key me-2"></i> Đổi mật khẩu
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Print Header - Only visible when printing -->
+                <div class="print-only text-center mb-4">
+                    <h2>HÓA ĐƠN BÁN HÀNG</h2>
+                    <p>SHOP ĐỒ GIA DỤNG</p>
+                    <p>Mã đơn hàng: #<span th:text="${order.id}">12345</span></p>
+                    <p>Ngày: <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</span></p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Chi tiết đơn hàng #<span th:text="${order.id}">12345</span></h5>
+                            <span th:class="${'badge ' + 
+                                (order.orderStatus == 'PENDING' ? 'bg-warning' : 
+                                (order.orderStatus == 'CONFIRMED' ? 'bg-info' : 
+                                (order.orderStatus == 'SHIPPING' ? 'bg-primary' : 
+                                (order.orderStatus == 'DELIVERED' ? 'bg-success' : 'bg-danger'))))}">
+                                <span th:text="${order.orderStatus == 'PENDING' ? 'Chờ xác nhận' : 
+                                    (order.orderStatus == 'CONFIRMED' ? 'Đã xác nhận' : 
+                                    (order.orderStatus == 'SHIPPING' ? 'Đang giao' : 
+                                    (order.orderStatus == 'DELIVERED' ? 'Đã giao' : 'Đã hủy')))}">
+                                    Trạng thái
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6>Thông tin giao hàng</h6>
+                                <p class="mb-1"><strong>Người nhận:</strong> <span th:text="${order.customerName}">Họ và tên</span></p>
+                                <p class="mb-1"><strong>Số điện thoại:</strong> <span th:text="${order.customerPhone}">0123456789</span></p>
+                                <p class="mb-1"><strong>Địa chỉ:</strong> <span th:text="${order.shippingAddress}">Địa chỉ giao hàng</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Thông tin đơn hàng</h6>
+                                <p class="mb-1"><strong>Ngày đặt:</strong> <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</span></p>
+                                <p class="mb-1"><strong>Phương thức thanh toán:</strong> 
+                                    <span th:text="${order.paymentMethod == 'COD' ? 'Thanh toán khi nhận hàng' : 'Chuyển khoản ngân hàng'}">
+                                        COD
+                                    </span>
+                                </p>
+                                <div th:if="${order.paymentMethod == 'BANK_TRANSFER'}" class="alert alert-info mt-2">
+                                    <small>
+                                        <strong>Thông tin chuyển khoản:</strong><br>
+                                        Ngân hàng: BIDV<br>
+                                        Số tài khoản: 1234567890<br>
+                                        Chủ tài khoản: SHOP DO GIA DUNG<br>
+                                        Nội dung: DH<span th:text="${order.id}">12345</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${order.orderItems}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img th:if="${item.product.imageUrl}" th:src="${item.product.imageUrl}" 
+                                                     alt="Product Image" style="width: 50px; height: 50px; object-fit: cover;" 
+                                                     class="me-2 no-print">
+                                                <span th:text="${item.product.name}">Tên sản phẩm</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT') + 'đ'}">
+                                            Giá
+                                        </td>
+                                        <td th:text="${item.quantity}">1</td>
+                                        <td th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 0, 'POINT') + 'đ'}">
+                                            Tổng
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-end"><strong>Tổng tiền:</strong></td>
+                                        <td>
+                                            <strong th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT') + 'đ'}">
+                                                Tổng cộng
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="mt-4 no-print">
+                            <a href="/profile/orders" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại
+                            </a>
+                            <button class="btn btn-primary ms-2" onclick="printInvoice()">
+                                <i class="fas fa-print me-2"></i>In hóa đơn
+                            </button>
+                            <button th:if="${order.orderStatus == 'PENDING'}" class="btn btn-danger float-end" 
+                                    onclick="cancelOrder(this)" th:data-order-id="${order.id}">
+                                Hủy đơn hàng
+                            </button>
+                        </div>
+
+                        <!-- Theo dõi đơn hàng -->
+                        <div class="mt-4 no-print" th:if="${order.orderStatus != 'CANCELLED' && order.orderStatus != 'DELIVERED'}">
+                            <h6>Theo dõi đơn hàng</h6>
+                            <div class="progress-track">
+                                <ul class="progressbar">
+                                    <li th:class="${order.orderStatus != null ? 'active' : ''}">Đặt hàng</li>
+                                    <li th:class="${order.orderStatus == 'CONFIRMED' || order.orderStatus == 'SHIPPING' || order.orderStatus == 'DELIVERED' ? 'active' : ''}">Xác nhận</li>
+                                    <li th:class="${order.orderStatus == 'SHIPPING' || order.orderStatus == 'DELIVERED' ? 'active' : ''}">Đang giao</li>
+                                    <li th:class="${order.orderStatus == 'DELIVERED' ? 'active' : ''}">Đã giao</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Thông báo đơn hàng đã hủy -->
+                        <div class="mt-4 alert alert-danger" th:if="${order.orderStatus == 'CANCELLED'}">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Đơn hàng này đã bị hủy.
+                        </div>
+
+                        <!-- Thông báo đơn hàng đã giao -->
+                        <div class="mt-4 alert alert-success" th:if="${order.orderStatus == 'DELIVERED'}">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Đơn hàng này đã được giao thành công.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="user/fragments/footer :: footer" class="no-print"></footer>
+
+    <script>
+        function cancelOrder(button) {
+            if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
+                const orderId = button.getAttribute('data-order-id');
+                fetch(`/profile/orders/${orderId}/cancel`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Có lỗi xảy ra khi hủy đơn hàng');
+                    }
+                });
+            }
+        }
+
+        function printInvoice() {
+            // Lưu tiêu đề trang gốc
+            const originalTitle = document.title;
+            // Đổi tiêu đề trang thành "Hóa đơn #[order_id]"
+            document.title = "Hóa đơn #" + document.querySelector("[th\\:text*='order.id']").textContent;
+            
+            // In trang
+            window.print();
+            
+            // Khôi phục tiêu đề trang sau khi in
+            setTimeout(function() {
+                document.title = originalTitle;
+            }, 100);
+        }
+    </script>
+
+    <style>
+        /* CSS cho thanh theo dõi đơn hàng */
+        .progress-track {
+            margin-top: 15px;
+        }
+        .progressbar {
+            counter-reset: step;
+            padding: 0;
+        }
+        .progressbar li {
+            list-style-type: none;
+            width: 25%;
+            float: left;
+            font-size: 12px;
+            position: relative;
+            text-align: center;
+            text-transform: uppercase;
+            color: #7d7d7d;
+        }
+        .progressbar li:before {
+            width: 30px;
+            height: 30px;
+            content: counter(step);
+            counter-increment: step;
+            line-height: 30px;
+            border: 2px solid #7d7d7d;
+            display: block;
+            text-align: center;
+            margin: 0 auto 10px auto;
+            border-radius: 50%;
+            background-color: white;
+        }
+        .progressbar li:after {
+            width: 100%;
+            height: 2px;
+            content: '';
+            position: absolute;
+            background-color: #7d7d7d;
+            top: 15px;
+            left: -50%;
+            z-index: -1;
+        }
+        .progressbar li:first-child:after {
+            content: none;
+        }
+        .progressbar li.active {
+            color: green;
+        }
+        .progressbar li.active:before {
+            border-color: green;
+            background-color: green;
+            color: white;
+        }
+        .progressbar li.active + li:after {
+            background-color: green;
+        }
+
+        @media print {
+            body {
+                font-size: 12pt;
+            }
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .table th, .table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+        }
+    </style>
+</body>
+</html> 

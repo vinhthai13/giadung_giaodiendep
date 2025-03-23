@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/layout :: head('Danh Mục')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Mục - Trang Quản Trị</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0">
+                <div th:replace="admin/fragments/layout :: sidebar" th:with="currentPage='categories'"></div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <div th:replace="admin/fragments/layout :: navbar" th:with="pageTitle='Quản Lý Danh Mục'"></div>
+                
+                <!-- Alert Message -->
+                <div th:if="${message}" class="alert alert-success alert-dismissible fade show my-3" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${message}">Success message</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <h1 class="h3 mb-4 text-gray-800 fw-bold">
+                    <i class="fas fa-tags me-2 text-primary"></i>Danh Sách Danh Mục
+                </h1>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <p class="text-muted">Quản lý tất cả danh mục sản phẩm trong hệ thống</p>
+                    </div>
+                    <a th:href="@{/admin/categories/new}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Thêm Danh Mục Mới
+                    </a>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Danh Mục</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Tùy chọn:</div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-download me-1"></i> Xuất dữ liệu</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-print me-1"></i> In danh sách</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên danh mục</th>
+                                        <th>Mô tả</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Ngày cập nhật</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="category : ${categories}">
+                                        <td th:text="${category.id}">1</td>
+                                        <td>
+                                            <a th:href="@{/admin/categories/edit/{id}(id=${category.id})}" class="fw-bold text-decoration-none" th:text="${category.name}">Tên danh mục</a>
+                                        </td>
+                                        <td th:text="${category.description}">Mô tả danh mục</td>
+                                        <td class="text-center">
+                                            <span class="badge px-3 py-2" th:classappend="${category.active ? 'bg-success' : 'bg-danger'}"
+                                                  th:text="${category.active ? 'Đang hoạt động' : 'Đã khóa'}">Trạng thái</span>
+                                        </td>
+                                        <td th:text="${#temporals.format(category.createdAt, 'dd-MM-yyyy HH:mm')}">01-01-2023</td>
+                                        <td th:text="${category.updatedAt != null ? #temporals.format(category.updatedAt, 'dd-MM-yyyy HH:mm') : '-'}">-</td>
+                                        <td class="text-center">
+                                            <a th:href="@{/admin/categories/edit/{id}(id=${category.id})}" class="btn btn-sm btn-primary me-1">
+                                                <i class="fas fa-edit"></i> Sửa
+                                            </a>
+                                            <a th:href="@{/admin/categories/delete/{id}(id=${category.id})}" 
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này không? Điều này sẽ ảnh hưởng đến tất cả sản phẩm liên quan.')">
+                                                <i class="fas fa-trash"></i> Xóa
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${categories.empty}">
+                                        <td colspan="7" class="text-center">
+                                            <div class="py-4">
+                                                <i class="fas fa-tags fa-3x text-gray-300 mb-3"></i>
+                                                <p class="mb-0">Không tìm thấy danh mục nào</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div th:replace="admin/fragments/layout :: scripts"></div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                language: {
+                    search: "Tìm kiếm:",
+                    lengthMenu: "Hiển thị _MENU_ mục",
+                    info: "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+                    infoFiltered: "(được lọc từ _MAX_ mục)",
+                    zeroRecords: "Không tìm thấy dữ liệu phù hợp",
+                    paginate: {
+                        first: "Đầu",
+                        previous: "Trước",
+                        next: "Tiếp",
+                        last: "Cuối"
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

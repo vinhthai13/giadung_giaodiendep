@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/header :: header">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav th:replace="user/fragments/navigation :: navigation"></nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Thông tin thanh toán</h5>
+                        <form th:action="@{/orders/create}" method="post" id="checkoutForm">
+                            <!-- CSRF token will be automatically added by Thymeleaf -->
+                            <div class="mb-3">
+                                <label for="customerName" class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" id="customerName" name="customerName" th:value="${user != null ? user.fullName : ''}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customerEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="customerEmail" name="customerEmail" th:value="${user != null ? user.email : ''}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customerPhone" class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" id="customerPhone" name="customerPhone" th:value="${user != null ? user.phone : ''}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="shippingAddress" class="form-label">Địa chỉ giao hàng</label>
+                                <textarea class="form-control" id="shippingAddress" name="shippingAddress" rows="3" required th:text="${user != null ? user.address : ''}"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Phương thức thanh toán</label>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                    <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                                    <option value="BANK_TRANSFER">Chuyển khoản ngân hàng</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Đặt hàng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Đơn hàng của bạn</h5>
+                        <div class="list-group list-group-flush">
+                            <div th:each="item : ${cart.items}" class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0" th:text="${item.product.name}">Tên sản phẩm</h6>
+                                        <small class="text-muted" th:text="'Số lượng: ' + ${item.quantity}">Số lượng</small>
+                                    </div>
+                                    <span class="text-primary" th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 0, 'POINT') + 'đ'}">Giá</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Tổng tiền:</h6>
+                            <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(cart.totalAmount, 0, 'COMMA', 0, 'POINT') + 'đ'}">Tổng tiền</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="user/fragments/footer :: footer"></footer>
+    
+    <script>
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Tạm dừng submit
+            
+            console.log('Form đang submit...');
+            console.log('Action:', this.action);
+            console.log('Method:', this.method);
+            
+            // Log form data
+            const formData = new FormData(this);
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+            
+            // Submit form sau khi log
+            this.submit();
+        });
+    </script>
+</body>
+</html> 

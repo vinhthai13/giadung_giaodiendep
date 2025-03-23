@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="user/fragments/header :: header">
+</head>
+<body>
+    <nav th:replace="user/fragments/navigation :: navigation"></nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="https://via.placeholder.com/50" class="rounded-circle" alt="Profile Picture">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-0" th:text="${user.fullName}">Tên người dùng</h6>
+                                <small class="text-muted" th:text="${user.email}">email@example.com</small>
+                            </div>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="/profile" class="list-group-item list-group-item-action active">
+                                <i class="fas fa-user me-2"></i> Thông tin tài khoản
+                            </a>
+                            <a href="/profile/orders" class="list-group-item list-group-item-action">
+                                <i class="fas fa-shopping-bag me-2"></i> Đơn hàng của tôi
+                            </a>
+                            <a href="/profile/addresses" class="list-group-item list-group-item-action">
+                                <i class="fas fa-map-marker-alt me-2"></i> Sổ địa chỉ
+                            </a>
+                            <a href="/profile/change-password" class="list-group-item list-group-item-action">
+                                <i class="fas fa-key me-2"></i> Đổi mật khẩu
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Profile Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Thông tin tài khoản</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/profile/update}" method="post" th:object="${user}">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label">Họ và tên</label>
+                                    <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="phone" th:field="*{phone}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="dateOfBirth" class="form-label">Ngày sinh</label>
+                                    <input type="date" class="form-control" id="dateOfBirth" th:field="*{dateOfBirth}">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Đơn hàng gần đây</h5>
+                        <a href="/profile/orders" class="btn btn-link">Xem tất cả</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="order : ${recentOrders}">
+                                        <td th:text="${order.id}">#12345</td>
+                                        <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}">01/01/2024</td>
+                                        <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT') + 'đ'}">
+                                            1.000.000đ
+                                        </td>
+                                        <td>
+                                            <span th:class="${'badge ' + 
+                                                (order.status == 'PENDING' ? 'bg-warning' : 
+                                                (order.status == 'CONFIRMED' ? 'bg-info' : 
+                                                (order.status == 'SHIPPING' ? 'bg-primary' : 
+                                                (order.status == 'DELIVERED' ? 'bg-success' : 'bg-danger'))))}">
+                                                <span th:text="${order.status == 'PENDING' ? 'Chờ xác nhận' : 
+                                                    (order.status == 'CONFIRMED' ? 'Đã xác nhận' : 
+                                                    (order.status == 'SHIPPING' ? 'Đang giao' : 
+                                                    (order.status == 'DELIVERED' ? 'Đã giao' : 'Đã hủy')))}">
+                                                    Trạng thái
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a th:href="@{/profile/orders/{id}(id=${order.id})}" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                Chi tiết
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="user/fragments/footer :: footer"></footer>
+</body>
+</html> 
